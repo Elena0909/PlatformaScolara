@@ -1,0 +1,378 @@
+﻿<Window x:Class="PlatformaScoala.Views.DirigView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlatformaScoala.ViewModels"
+        mc:Ignorable="d"
+         xmlns:help="clr-namespace:PlatformaScoala.Helpers"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+         Icon="/Resources/school.png"
+        Title="Dirig" Height="510.4" Width="800">
+    <Window.DataContext>
+        <local:DirigVM/>
+    </Window.DataContext>
+    <StackPanel>
+        <TabControl HorizontalAlignment="Left" Height="521" VerticalAlignment="Top" Width="794" Margin="0,0,-0.4,-0.2">
+            <TabItem Header="Absente clasa" >
+                <Grid Margin="-2,0,-2,-2">
+
+                    <Grid Margin="0,140,250,320.8">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="91,4,91,3.6" 
+                               x:Name="mesajElev"
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+
+
+                    <Label Content="Nemotivate:" 
+               HorizontalAlignment="Left"
+               Height="26" Margin="34,78,0,390.8" 
+               VerticalAlignment="Center" Width="75"/>
+
+                    <CheckBox  IsChecked="{Binding Nemotivabile}"
+                                  HorizontalAlignment="Center"
+                                  Height="26" Margin="108,85,668,383.8"
+                                  VerticalAlignment="Center" Width="16"/>
+                    <Label Content="Nr absente:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,78,472,390.8" 
+                            VerticalAlignment="Center" Width="74"/>
+                    <TextBlock
+                                   HorizontalAlignment="Left" 
+                                   Height="20" 
+                                   Margin="325,84,0,390.8"
+                                   TextWrapping="Wrap" 
+                                   Text="{Binding NrAbsente}"
+                                   VerticalAlignment="Center" Width="31" />
+
+
+                    <Grid Margin="-2,0,0,0" Height="49" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Blue"
+                   HorizontalAlignment="Left"
+                   Height="51" Margin="-3,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                    </Grid>
+
+                    <Grid Margin="0,200,0,-0.2">
+                        <Border Margin="-2,0,-2,36.4">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Blue" Offset="0.1" />
+                                    <GradientStop Color="#FF2B00FF" Offset="0.25" />
+                                    <GradientStop Color="#FF4F00FF" Offset="0.4" />
+                                    <GradientStop Color="#FF6B00FF" Offset="0.55" />
+                                    <GradientStop Color="#FF9000FF" Offset="0.7" />
+                                    <GradientStop Color="#FFD000FF" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="absente"  Margin="10,10,16,51.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding CatalogAbsente}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nume" Binding="{Binding Elev.Nume}" Width="85"/>
+                                <DataGridTextColumn Header="Prenume"  Binding="{Binding Elev.Prenume}" Width="85"/>
+                                <DataGridTextColumn Header="Materie"   Binding="{Binding Materie.Denumire}" Width="110"/>
+                                <DataGridTextColumn Header="Data" Binding="{Binding Data}"  Width="150"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="80"/>
+                                <DataGridTextColumn Header="Motivabila" Binding="{Binding Motivabila}" Width="80"/>
+                                <DataGridTextColumn Header="Motiva" Binding="{Binding Motivata}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <Button Content="Motiveaza" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="614,71,38,377.8" 
+                    VerticalAlignment="Center"
+                    Width="140"
+                            Command="{Binding Motiveaza}" 
+                    CommandParameter="{Binding SelectedItem, ElementName=absente}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                <Setter Property="Background" Value="#FF9000FF"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF4F00FF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="AbsenteElev">
+                <Grid Margin="-2,0,-2,-2">
+                    <Label Content="Nr absente:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,118,535,350.8" 
+                            VerticalAlignment="Center" Width="79"/>
+                    <Label Content="Nemotivate:" 
+               HorizontalAlignment="Left"
+               Height="26" Margin="34,118,0,350.8" 
+               VerticalAlignment="Center" Width="75"/>
+
+                    <CheckBox  IsChecked="{Binding NemotivabileElev}"
+                                  HorizontalAlignment="Center"
+                                  Height="26" Margin="112,124,664,0"
+                                  VerticalAlignment="Top" Width="16"/>
+                    <Grid Margin="0,140,250,320.8">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="91,4,91,3.6" 
+
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+                    <TextBlock
+                                   HorizontalAlignment="Left" 
+                                   Height="20" 
+                                   Margin="325,84,0,390.8"
+                                   TextWrapping="Wrap" 
+                                   Text="{Binding NrAbsente}"
+                                   VerticalAlignment="Center" Width="31" />
+
+
+                    <Grid Margin="-2,0,0,0" Height="49" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Blue"
+                   HorizontalAlignment="Left"
+                   Height="51" Margin="1,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                    </Grid>
+
+                    <Grid Margin="0,200,0,-0.2">
+                        <Border Margin="-2,0,-2,36.4">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Blue" Offset="0.1" />
+                                    <GradientStop Color="#FF2B00FF" Offset="0.25" />
+                                    <GradientStop Color="#FF4F00FF" Offset="0.4" />
+                                    <GradientStop Color="#FF6B00FF" Offset="0.55" />
+                                    <GradientStop Color="#FF9000FF" Offset="0.7" />
+                                    <GradientStop Color="#FFD000FF" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="absenteE"  Margin="10,10,16,51.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding AbsenteElev}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nume" Binding="{Binding Elev.Nume}" Width="85"/>
+                                <DataGridTextColumn Header="Prenume"  Binding="{Binding Elev.Prenume}" Width="85"/>
+                                <DataGridTextColumn Header="Materie"   Binding="{Binding Materie.Denumire}" Width="110"/>
+                                <DataGridTextColumn Header="Data" Binding="{Binding Data}"  Width="150"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="80"/>
+                                <DataGridTextColumn Header="Motivabila" Binding="{Binding Motivabila}" Width="80"/>
+                                <DataGridTextColumn Header="Motiva" Binding="{Binding Motivata}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <ComboBox Margin="156,72,436,390.8" 
+                              ItemsSource="{Binding Elevi}" 
+                              SelectedItem="{Binding ElevCurent}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Nume}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Prenume}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Content="Elevi"  HorizontalAlignment="Left" 
+                           Height="32" Margin="46,72,0,0" 
+                           VerticalAlignment="Top" 
+                           Width="105"/>
+                    <TextBlock 
+                        Height="25" 
+                        TextWrapping="Wrap" 
+                        Text="{Binding NrAbsenteElev}"
+                        Width="41"
+                        Margin="252,123,499,346.8"/>
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem Header="MediiElev">
+                <Grid Margin="-2,0,-2,-2">
+                    <Grid Margin="0,140,250,320.8">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="91,4,91,3.6" 
+
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+                    <TextBlock
+                                   HorizontalAlignment="Left" 
+                                   Height="20" 
+                                   Margin="325,84,0,390.8"
+                                   TextWrapping="Wrap" 
+                                   Text="{Binding NrAbsente}"
+                                   VerticalAlignment="Center" Width="31" />
+
+
+                    <Grid Margin="-2,0,0,0" Height="49" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Blue"
+                   HorizontalAlignment="Left"
+                   Height="51" Margin="1,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                    </Grid>
+
+                    <Grid Margin="0,200,0,-0.2">
+                        <Border Margin="-2,0,-2,36.4">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Blue" Offset="0.1" />
+                                    <GradientStop Color="#FF2B00FF" Offset="0.25" />
+                                    <GradientStop Color="#FF4F00FF" Offset="0.4" />
+                                    <GradientStop Color="#FF6B00FF" Offset="0.55" />
+                                    <GradientStop Color="#FF9000FF" Offset="0.7" />
+                                    <GradientStop Color="#FFD000FF" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="mediiE"  Margin="10,10,16,51.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding MediiElev}">
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Materie"   Binding="{Binding Materie}" Width="110"/>
+
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="80"/>
+                                <DataGridTextColumn Header="Nota" Binding="{Binding Nota}" Width="80"/>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <ComboBox Margin="156,72,436,390.8" 
+                              ItemsSource="{Binding Elevi}" 
+                              SelectedItem="{Binding ElevCurent}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Nume}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Prenume}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Content="Elevi"  HorizontalAlignment="Left" 
+                           Height="32" Margin="46,72,0,0" 
+                           VerticalAlignment="Top" 
+                           Width="105"/>
+
+                    <Label Content="Medie finala:" Margin="417,76,281,386.8" />
+                    <TextBlock Margin="512,82,232,390.8" Text="{Binding MedieF}"/>
+
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Corigenti">
+                    <Grid Margin="-2,0,-2,-2">
+                        <Grid Margin="0,140,250,320.8">
+                            <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="91,4,91,3.6" 
+
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                        </Grid>
+
+
+                    <Grid Margin="-2,0,0,0" Height="49" VerticalAlignment="Top">
+                            <Grid.DataContext>
+                                <help:Helper/>
+                            </Grid.DataContext>
+                            <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Blue"
+                   HorizontalAlignment="Left"
+                   Height="51" Margin="1,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                        </Grid>
+
+                    <Grid Margin="0,200,0,-0.2">
+                        <Border Margin="-2,0,-2,36.4">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Blue" Offset="0.1" />
+                                    <GradientStop Color="#FF2B00FF" Offset="0.25" />
+                                    <GradientStop Color="#FF4F00FF" Offset="0.4" />
+                                    <GradientStop Color="#FF6B00FF" Offset="0.55" />
+                                    <GradientStop Color="#FF9000FF" Offset="0.7" />
+                                    <GradientStop Color="#FFD000FF" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="corigenti"  Margin="10,10,16,51.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding Corigenti}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Materie"   Binding="{Binding Elev.Nume}" Width="110"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Elev.Prenume}" Width="80"/>
+                                <DataGridTextColumn Header="Materie" Binding="{Binding Materie.Denumire}" Width="80"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Nota}" Width="80"/>
+                                <DataGridTextColumn Header="Nota" Binding="{Binding Semestru}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+                </TabItem>
+        </TabControl>
+    </StackPanel>
+</Window>

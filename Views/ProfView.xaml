@@ -1,0 +1,773 @@
+﻿<Window x:Class="PlatformaScoala.Views.ProfView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlatformaScoala.ViewModels"
+        xmlns:help="clr-namespace:PlatformaScoala.Helpers"
+        xmlns:Converter1="clr-namespace:PlatformaScoala.Converters"
+        xmlns:Converter2="clr-namespace:PlatformaScoala.Converters"
+        xmlns:Converter3="clr-namespace:PlatformaScoala.Converters"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Icon="/Resources/school.png"  Title="Prof" Height="550" Width="800">
+    <Window.DataContext>
+        <local:ProfesorVM />
+    </Window.DataContext>
+    <StackPanel>
+        <StackPanel.Resources>
+            <Converter1:RubricaNoteConvert x:Key="rubricaNoteConvert"/>
+            <Converter2:RubricaAbsenteConvert x:Key="rubricaAbsentaConvert"/>
+            <Converter3:RubricaMediiConvert x:Key="rubricaMediiConvert"/>
+        </StackPanel.Resources>
+        <TabControl HorizontalAlignment="Left" Height="521" VerticalAlignment="Top" Width="794" Margin="0,0,-0.4,-0.2">
+            <TabItem Header="Note">
+                <Grid Margin="-2,0,-2,-2">
+
+                    <Grid Margin="580,64,0,245.8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="92"/>
+                            <RowDefinition Height="92"/>
+
+                        </Grid.RowDefinitions>
+                        <Button Content="Adauga" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="0,0,0,0" 
+                    VerticalAlignment="Center"
+                    Width="140" Command="{Binding AddNota}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource rubricaNoteConvert}">
+                                    <Binding ElementName="claseN" Path="SelectedItem"/>
+                                    <Binding ElementName="eleviN" Path="SelectedItem"/>
+                                    <Binding ElementName="materieN" Path="SelectedItem"/>
+                                    <Binding ElementName="nota" Path="Text"/>
+                                    <Binding ElementName="dataN" Path="SelectedDate"/>
+                                    <Binding ElementName="semstruN" Path="SelectedItem"/>
+                                    <Binding ElementName="teza" Path="SelectedItem"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="Orange"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF5C00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Content="Anuleaza" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="0,0,0,0" 
+                    VerticalAlignment="Center"
+                    Width="140" Grid.Row="1"
+                            Command="{Binding DeleteNota}" 
+                    CommandParameter="{Binding ElementName=note, Path=SelectedItem}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="Orange"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF1B00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+
+                    <Grid Margin="0,49,220,275">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="55"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Materie:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83"/>
+                        <Label Content="Clasa:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83" Grid.Row="1"/>
+                        <Label Content="Elevi" 
+            HorizontalAlignment="Right"
+            Height="26" Margin="0,0,0,0" 
+            VerticalAlignment="Center" Width="83" Grid.Row="2"/>
+
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="materieN"
+                            VerticalAlignment="Center"  SelectedItem="{Binding Materie}"
+                            Width="126" ItemsSource="{Binding Materii}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Denumire}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="5,15,5,0" x:Name="claseN"
+                            VerticalAlignment="Top" SelectedItem="{Binding Clasa}"
+                            Width="126" ItemsSource="{Binding Clase}"   Grid.Row="1" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Clasa}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="eleviN"
+                            VerticalAlignment="Center"
+                            Width="126" ItemsSource="{Binding Elevi}" Grid.Row="2" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Nume}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Prenume}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Content="Teza:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,0,0,0" 
+                            VerticalAlignment="Center" Width="83" Grid.Column="2"/>
+                        <ComboBox Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="teza"
+                            VerticalAlignment="Center" 
+                            Width="126" ItemsSource="{Binding Teza}"/>
+                        <Label Content="Nota:" 
+                            HorizontalAlignment="Left"
+                            Height="26" Margin="22,15,0,15" 
+                            VerticalAlignment="Center" Width="40" Grid.Column="2" Grid.Row="1"/>
+                        <TextBox Grid.Column="2" BorderBrush="Black"
+                                 HorizontalAlignment="Right" Name="nota"
+                                 Height="26" Margin="0,17,16,13"
+                                 Grid.Row="1" TextWrapping="Wrap" 
+                                 Text="" VerticalAlignment="Center" 
+                                 Width="43"/>
+                        <Label Content="Data:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,0,0,0" 
+                            VerticalAlignment="Center" Width="83" Grid.Column="2" Grid.Row="2"/>
+                       
+                        <Label Content="Semestru:" 
+                            HorizontalAlignment="Left"
+                            Height="26" Margin="22,15,0,15" 
+                            VerticalAlignment="Center" Width="62" Grid.Column="3" Grid.Row="1"/>
+                       
+                        <DatePicker Grid.Column="3"  Name="dataN"
+                                    HorizontalAlignment="Left" Height="26" Margin="22,15,0,0" Grid.Row="2" VerticalAlignment="Top" Width="104"/>
+                        <ComboBox Grid.Column="3" 
+                                  HorizontalAlignment="Left"
+                                  Height="26" Margin="104,15,0,0"
+                                  Name="semstruN" ItemsSource="{Binding Semestre}"
+                                  Grid.Row="1" VerticalAlignment="Top" Width="32"/>
+                    </Grid>
+                    <Grid Margin="-2,0,-0.4,0" Height="65" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Orange"
+                   HorizontalAlignment="Left"
+                   Height="58" Margin="-3,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                        <Button Content="Clasa mea" Name="dirig"
+                            HorizontalAlignment="Left" Visibility="Hidden"
+                            Height="41" Margin="31,5,0,0"
+                            VerticalAlignment="Top"
+                            Width="128" Click="Dirig_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="#FFFF5C00"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF5C00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="90" Height="30"
+                            CornerRadius="10"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <Grid Margin="0,260,0,0">
+                        <Border Margin="-2,0,-2,-2">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Orange" Offset="0.1" />
+                                    <GradientStop Color="#FFFF7700" Offset="0.25" />
+                                    <GradientStop Color="#FFFF5C00" Offset="0.4" />
+                                    <GradientStop Color="#FFFF4900" Offset="0.55" />
+                                    <GradientStop Color="#FFFF1B00" Offset="0.7" />
+                                    <GradientStop Color="Red" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="note"  Margin="10,10,16,17.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"  ItemsSource="{Binding CatalogNote}" >
+                           
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Clasa" Binding="{Binding Clasa.Clasa}" Width="45"/>
+                                <DataGridTextColumn Header="Nune"  Binding="{Binding Elev.Nume}" Width="85"/>
+                                <DataGridTextColumn Header="Prenume"   Binding="{Binding Elev.Prenume}" Width="110"/>
+                                <DataGridTextColumn Header="Materie" Binding="{Binding Materie.Denumire}"  Width="70"/>
+                                <DataGridTextColumn Header="Nota" Binding="{Binding Nota}" Width="50"/>
+                                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="140"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="60"/>
+                                <DataGridTextColumn Header="Teza" Binding="{Binding Teza}" Width="50"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <Grid Margin="0,220,250,240">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="0,0,0,0" 
+                               Name="mesajN"
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+                </Grid>
+                
+            </TabItem>
+            <TabItem Header="Absente">
+
+                <Grid Margin="-2,0,-2,-2">
+                    
+                     <Grid Margin="0,220,250,240">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="0,0,0,0" 
+                            
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+                    <Grid Margin="-2,0,-0.4,0" Height="65" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Orange"
+                   HorizontalAlignment="Left"
+                   Height="58" Margin="-3,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                    </Grid>
+
+                    <Grid Margin="580,64,0,245.8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="92"/>
+                            <RowDefinition Height="92"/>
+
+                        </Grid.RowDefinitions>
+
+                        
+                        <Button Content="Adauga" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="0,0,0,0" 
+                    VerticalAlignment="Center"
+                    Width="140" Command="{Binding AddAbsenta}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource rubricaAbsentaConvert}">
+                                    <Binding ElementName="claseA" Path="SelectedItem"/>
+                                    <Binding ElementName="eleviA" Path="SelectedItem"/>
+                                    <Binding ElementName="materieA" Path="SelectedItem"/>
+                                    <Binding ElementName="dataA" Path="SelectedDate"/>
+                                    <Binding ElementName="semestruA" Path="SelectedItem"/>
+                                    <Binding ElementName="motivabila" Path="IsChecked"/>
+                                    <Binding ElementName="motivata" Path="IsChecked"/>
+                                </MultiBinding>
+
+                            </Button.CommandParameter>
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="Orange"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF5C00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Content="Motiveaza" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="0,0,0,0" 
+                    VerticalAlignment="Center"
+                    Width="140" Grid.Row="1"
+                            Command="{Binding Motiveaza}" 
+                    CommandParameter="{Binding ElementName=absente, Path=SelectedItem}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="Orange"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF1B00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+
+                    <Grid Margin="0,49,220,275">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="55"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Materie:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83"/>
+                        <Label Content="Clasa:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83" Grid.Row="1"/>
+                        <Label Content="Elevi" 
+            HorizontalAlignment="Right"
+            Height="26" Margin="0,0,0,0" 
+            VerticalAlignment="Center" Width="83" Grid.Row="2"/>
+
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="materieA"
+                            VerticalAlignment="Center"  SelectedItem="{Binding Materie}"
+                            Width="126" ItemsSource="{Binding Materii}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Denumire}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="5,15,5,0" x:Name="claseA"
+                            VerticalAlignment="Top" SelectedItem="{Binding Clasa}"
+                            Width="126" ItemsSource="{Binding Clase}"   Grid.Row="1" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Clasa}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="eleviA"
+                            VerticalAlignment="Center"
+                            Width="126" ItemsSource="{Binding Elevi}" Grid.Row="2" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Nume}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Prenume}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Content="Motivabila:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,15" 
+                            VerticalAlignment="Center" Width="69" Grid.Column="2"/>
+                        <CheckBox  Grid.Column="3" x:Name="motivabila"
+                                   HorizontalAlignment="Left" 
+                                  Height="14" Margin="5,23,0,19" 
+                                   VerticalAlignment="Center" Width="15"/>
+                        <CheckBox  x:Name="motivata"
+                                   HorizontalAlignment="Left" IsChecked="False"
+                                  Height="14" Margin="5,23,0,19" Visibility="Hidden"
+                                   VerticalAlignment="Center" Width="15"/>
+                        <DatePicker  x:Name="dataA"  Margin="0,0,0,0"
+                HorizontalAlignment="Left" Grid.Column="3" Grid.Row="2"
+                                     Height="26" VerticalAlignment="Center"
+                                     Width="104"/>
+
+                        <Label Content="Data:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,15" 
+                            VerticalAlignment="Center" Width="69" Grid.Column="2" Grid.Row="2"/>
+                        <Label Content="Semestru:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,13,0,17" 
+                            VerticalAlignment="Center" Width="69" Grid.Column="2" Grid.Row="1"/>
+                        <ComboBox Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="5,13,87,17" x:Name="semestruA"
+                            VerticalAlignment="Center" 
+                            Width="44" ItemsSource="{Binding Semestre}" Grid.Row="1" />
+                    </Grid>
+
+                  
+                     <Grid Margin="-2,0,-0.4,0" Height="65" VerticalAlignment="Top">
+                            <Grid.DataContext>
+                                <help:Helper/>
+                            </Grid.DataContext>
+                            <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Orange"
+                   HorizontalAlignment="Left"
+                   Height="58" Margin="-3,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                            <Button Content="Clasa mea" Name="dirigA" Visibility="Hidden"
+                            HorizontalAlignment="Left"  Click="Dirig_Click"
+                            Height="41" Margin="31,5,0,0"
+                            VerticalAlignment="Top"
+                            Width="128">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                    <Setter Property="Background" Value="#FFFF5C00"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFFF5C00"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Width="90" Height="30"
+                            CornerRadius="10"
+                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    
+                    <Grid Margin="0,260,0,0">
+                        <Border Margin="-2,0,-2,-2">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Orange" Offset="0.1" />
+                                    <GradientStop Color="#FFFF7700" Offset="0.25" />
+                                    <GradientStop Color="#FFFF5C00" Offset="0.4" />
+                                    <GradientStop Color="#FFFF4900" Offset="0.55" />
+                                    <GradientStop Color="#FFFF1B00" Offset="0.7" />
+                                    <GradientStop Color="Red" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="absente"  Margin="10,10,16,17.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding CatalogAbsente}" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Clasa" Binding="{Binding Clasa.Clasa}" Width="45"/>
+                                <DataGridTextColumn Header="Nune"  Binding="{Binding Elev.Nume}" Width="85"/>
+                                <DataGridTextColumn Header="Prenume"   Binding="{Binding Elev.Prenume}" Width="110"/>
+                                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="140"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="70"/>
+                                <DataGridTextColumn Header="Motivabila" Binding="{Binding Motivabila}" Width="80"/>
+                                <DataGridTextColumn Header="Motivata" Binding="{Binding  Motivata}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Medii">
+                <Grid Margin="-2,0,-2,-2">
+
+                    <Grid Margin="0,220,250,240">
+                        <Label Content="{Binding Mesaj}" 
+               HorizontalAlignment="Center"
+               Height="26" Margin="0,0,0,0" 
+                            
+               VerticalAlignment="Center" 
+               HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                            Width="360" Foreground="Red"/>
+                    </Grid>
+                    
+                    <Button Content="Calculeaza" 
+                    HorizontalAlignment="Center"
+                    Height="46" Margin="614,118,38,330.8" 
+                    VerticalAlignment="Center"
+                    Width="140"
+                        Command="{Binding CalculMedie}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource rubricaMediiConvert}">
+                                    <Binding ElementName="claseM" Path="SelectedItem"/>
+                                    <Binding ElementName="eleviM" Path="SelectedItem"/>
+                                    <Binding ElementName="materieM" Path="SelectedItem"/>
+                                    <Binding ElementName="semestruM" Path="SelectedItem"/>
+                            </MultiBinding>
+                            </Button.CommandParameter>
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                <Setter Property="Background" Value="Orange"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFFF5C00"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Width="140" Height="46"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Grid Margin="0,49,220,275">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="82.5"/>
+                            <RowDefinition Height="82.5"/>
+
+                        </Grid.RowDefinitions>
+                        <Label Content="Materie:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83"/>
+                        <Label Content="Clasa:" 
+               HorizontalAlignment="Right"
+               Height="26" Margin="0,0,0,0" 
+               VerticalAlignment="Center" Width="83" Grid.Row="1"/>
+                        <Label Content="Elevi" 
+            HorizontalAlignment="Right"
+            Height="26" Margin="0,0,0,0"  Grid.Column="2"
+            VerticalAlignment="Center" Width="83" Grid.Row="0"/>
+                        <Label Content="Semestru:" 
+                            HorizontalAlignment="Right"
+                            Height="26" Margin="0,30.8,14,26.4" 
+                            VerticalAlignment="Center" Width="69" Grid.Column="2" Grid.Row="1"/>
+                        <ComboBox Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="11,30.8,81,26.4" x:Name="semestruM"
+                            VerticalAlignment="Center" 
+                            Width="44" ItemsSource="{Binding Semestre}" Grid.Row="1" />
+
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="materieM"
+                            VerticalAlignment="Center"  SelectedItem="{Binding Materie}"
+                            Width="126" ItemsSource="{Binding Materii}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Denumire}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="claseM"
+                            VerticalAlignment="Center" SelectedItem="{Binding Clasa}"
+                            Width="126" ItemsSource="{Binding Clase}"   Grid.Row="1" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Clasa}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            Height="26" Margin="0,0,0,0" x:Name="eleviM"
+                            VerticalAlignment="Center"
+                            Width="126" ItemsSource="{Binding Elevi}">
+
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Nume}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Prenume}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                    </Grid>
+
+                    <Grid Margin="-2,0,-0.4,0" Height="65" VerticalAlignment="Top">
+                        <Grid.DataContext>
+                            <help:Helper/>
+                        </Grid.DataContext>
+                        <Label Content="{Binding UserCurent}" 
+                   FontFamily="Arial"
+                   FontSize="20"
+                   HorizontalContentAlignment="Right"
+                   VerticalContentAlignment="Center"
+                   Background="Orange"
+                   HorizontalAlignment="Left"
+                   Height="58" Margin="-3,-3,0,0"  
+                   VerticalAlignment="Top" 
+                   Width="792"/>
+                    </Grid>
+                    <Grid Margin="0,260,0,0">
+                        <Border Margin="-2,0,-2,-2">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Orange" Offset="0.1" />
+                                    <GradientStop Color="#FFFF7700" Offset="0.25" />
+                                    <GradientStop Color="#FFFF5C00" Offset="0.4" />
+                                    <GradientStop Color="#FFFF4900" Offset="0.55" />
+                                    <GradientStop Color="#FFFF1B00" Offset="0.7" />
+                                    <GradientStop Color="Red" Offset="0.85" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <DataGrid x:Name="medii"  Margin="10,10,16,17.4"  AutoGenerateColumns="False"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding CatalogMedii}" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Clasa" Binding="{Binding Clasa.Clasa}" Width="45"/>
+                                <DataGridTextColumn Header="Nune"  Binding="{Binding Elev.Nume}" Width="85"/>
+                                <DataGridTextColumn Header="Prenume"   Binding="{Binding Elev.Prenume}" Width="110"/>
+                                <DataGridTextColumn Header="Materie" Binding="{Binding Materie.Denumire}"  Width="70"/>
+                                <DataGridTextColumn Header="Nota" Binding="{Binding Nota}" Width="50"/>
+                                <DataGridTextColumn Header="Semestru" Binding="{Binding Semestru}" Width="60"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <Button Content="Clasa mea" 
+                            HorizontalAlignment="Left" Name="dirigM"
+                            Height="41" Margin="31,5,0,0" Visibility="Hidden"
+                            VerticalAlignment="Top"
+                            Width="128" Click="Dirig_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="TextElement.FontFamily" Value="Font"/>
+                                <Setter Property="Background" Value="#FFFF5C00"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFFF5C00"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Width="90" Height="30"
+                            CornerRadius="10"
+                            Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </TabItem>
+           
+        </TabControl>
+    </StackPanel>
+</Window>
